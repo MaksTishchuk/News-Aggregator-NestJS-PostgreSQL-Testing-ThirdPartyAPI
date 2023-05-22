@@ -128,7 +128,7 @@ export class AuthController {
   })
   @Patch('/change-password')
   @UseGuards(JwtAuthGuard)
-  async changePassword(
+  changePassword(
     @GetUser() user: UserEntity,
     @Body() changePasswordDto: ChangePasswordDto
   ) {

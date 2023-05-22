@@ -1,5 +1,4 @@
-import {IsOptional, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
+import {IsOptional} from "class-validator";
 import {ApiModelPropertyOptional} from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
 export class SearchUsersDto {

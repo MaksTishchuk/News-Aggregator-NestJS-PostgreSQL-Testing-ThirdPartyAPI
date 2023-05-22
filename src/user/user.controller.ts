@@ -27,7 +27,7 @@ export class UserController {
   @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
   @Get()
   findAllUsers(): Promise<UserEntity[]> {
-    return this.userService.findAllUsers();
+    return this.userService.findAllUsers()
   }
 
   @ApiOkResponse({type: [UserEntity]})
@@ -37,7 +37,7 @@ export class UserController {
   searchUsers(
     @Query() searchUsersDto: SearchUsersDto
   ): Promise<UserEntity[]> {
-    return this.userService.searchUsers(searchUsersDto);
+    return this.userService.searchUsers(searchUsersDto)
   }
 
   @ApiOkResponse({type: UserEntity})
@@ -47,7 +47,7 @@ export class UserController {
   @Get('/my-profile')
   @UseGuards(JwtAuthGuard)
   getUserProfile(@GetUser() user: UserEntity): Promise<UserEntity> {
-    return this.userService.getUserProfile(user);
+    return this.userService.getUserProfile(user)
   }
 
   @ApiOkResponse({type: UserEntity})
@@ -65,14 +65,14 @@ export class UserController {
     @Body() updateUserProfileDto: UpdateUserProfileDto,
     @UploadedFile() avatar
   ): Promise<UserEntity> {
-    return this.userService.updateUserProfile(user, updateUserProfileDto, avatar);
+    return this.userService.updateUserProfile(user, updateUserProfileDto, avatar)
   }
 
   @ApiOkResponse({type: UserEntity})
   @ApiNotFoundResponse({schema: {example: new NotFoundException(`User with id was not found!`)}})
   @Get(':id')
-  findOneUser(@Param('id') id: string): Promise<UserEntity> {
-    return this.userService.findOneUser(+id);
+  findOneUser(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
+    return this.userService.findOneUser(+id)
   }
 
   @ApiOkResponse({type: UserEntity})
@@ -81,11 +81,11 @@ export class UserController {
   @ApiSecurity('bearer')
   @Post('/:id/follow')
   @UseGuards(JwtAuthGuard)
-  async followUser(
+  followUser(
     @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) followUserId: number
   ) {
-    return this.userService.followUser(user, followUserId);
+    return this.userService.followUser(user, followUserId)
   }
 
   @ApiOkResponse({type: UserEntity})
@@ -93,11 +93,11 @@ export class UserController {
   @ApiSecurity('bearer')
   @Delete('/:id/follow')
   @UseGuards(JwtAuthGuard)
-  async unfollowUser(
+  unfollowUser(
     @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) followUserId: number
   ) {
-    return this.userService.unfollowUser(user, followUserId);
+    return this.userService.unfollowUser(user, followUserId)
   }
 
   @ApiOkResponse({
@@ -113,8 +113,8 @@ export class UserController {
   @ApiSecurity('bearer')
   @Delete(':id')
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(+id);
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.deleteUser(+id)
   }
 
 }

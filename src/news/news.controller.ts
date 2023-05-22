@@ -22,6 +22,14 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {
   }
 
+  @ApiOkResponse({type: [NewsEntity]})
+  @ApiOperation({description: 'Get all news'})
+  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
+  @Get()
+  findAllNews(): Promise<NewsEntity[]> {
+    return this.newsService.findAllNews();
+  }
+
   @ApiOkResponse({type: NewsEntity})
   @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
   @ApiSecurity('bearer')
@@ -30,19 +38,11 @@ export class NewsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{name: 'images', maxCount: 10}]))
   createNews(
-    @GetUser() user: UserEntity,
     @Body() createNewsDto: CreateNewsDto,
+    @GetUser() user: UserEntity,
     @UploadedFiles() images
   ): Promise<NewsEntity> {
     return this.newsService.createNews(createNewsDto, user, images);
-  }
-
-  @ApiOkResponse({type: [NewsEntity]})
-  @ApiOperation({description: 'Get all news'})
-  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
-  @Get()
-  findAllNews(): Promise<NewsEntity[]> {
-    return this.newsService.findAllNews();
   }
 
   @ApiOkResponse({type: [NewsEntity]})
@@ -83,9 +83,9 @@ export class NewsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{name: 'images', maxCount: 10}]))
   updateNews(
-    @GetUser() user: UserEntity,
     @Param('slug') slug: string,
     @Body() updateNewsDto: UpdateNewsDto,
+    @GetUser() user: UserEntity,
     @UploadedFiles() images
   ): Promise<NewsEntity> {
     return this.newsService.updateNews(slug, updateNewsDto, user, images);
@@ -106,8 +106,8 @@ export class NewsController {
   @Delete('/:slug')
   @UseGuards(JwtAuthGuard)
   deleteNews(
-    @GetUser() user: UserEntity,
-    @Param('slug') slug: string
+    @Param('slug') slug: string,
+    @GetUser() user: UserEntity
   ) {
     return this.newsService.deleteNews(slug, user);
   }
@@ -117,9 +117,9 @@ export class NewsController {
   @ApiSecurity('bearer')
   @Post('/:slug/like')
   @UseGuards(JwtAuthGuard)
-  async likeNews(
-    @GetUser() user: UserEntity,
-    @Param('slug') newsSlug: string
+  likeNews(
+    @Param('slug') newsSlug: string,
+    @GetUser() user: UserEntity
   ) {
     return this.newsService.likeNews(newsSlug, user);
   }
@@ -129,9 +129,9 @@ export class NewsController {
   @ApiSecurity('bearer')
   @Delete('/:slug/like')
   @UseGuards(JwtAuthGuard)
-  async unlikeNews(
-    @GetUser() user: UserEntity,
-    @Param('slug') newsSlug: string
+  unlikeNews(
+    @Param('slug') newsSlug: string,
+    @GetUser() user: UserEntity
   ) {
     return this.newsService.unlikeNews(newsSlug, user);
   }

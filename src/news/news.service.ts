@@ -67,7 +67,7 @@ export class NewsService {
   async followingUsersNews(user: UserEntity): Promise<NewsEntity[]> {
     const foundUser = await this.userRepository.findOne({where: {id: user.id}, relations: ['following', 'following.news']})
     if (!foundUser) {
-      throw new NotFoundException(`User with id ${user.id} was not found! Follow failed!`)
+      throw new NotFoundException(`User with id ${user.id} was not found!`)
     }
     let followingUsersNews = []
     foundUser.following.forEach(user => {

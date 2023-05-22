@@ -34,18 +34,18 @@ export class CommentsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   createComment(
-    @GetUser() user: UserEntity,
-    @Body() createCommentDto: CreateCommentDto
+    @Body() createCommentDto: CreateCommentDto,
+    @GetUser() user: UserEntity
   ): Promise<CommentEntity> {
-    return this.commentsService.createComment(createCommentDto, user);
+    return this.commentsService.createComment(createCommentDto, user)
   }
 
   @ApiOkResponse({type: [CommentEntity]})
   @ApiOperation({description: 'Get all comments'})
   @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
   @Get()
-  findAllComment(): Promise<CommentEntity[]> {
-    return this.commentsService.findAllComments();
+  findAllComments(): Promise<CommentEntity[]> {
+    return this.commentsService.findAllComments()
   }
 
   @ApiOkResponse({type: CommentEntity})
@@ -53,7 +53,7 @@ export class CommentsController {
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
   findOneComment(@Param('id') id: number): Promise<CommentEntity> {
-    return this.commentsService.findOneComment(id);
+    return this.commentsService.findOneComment(id)
   }
 
   @ApiOkResponse({type: CommentEntity})
@@ -62,11 +62,11 @@ export class CommentsController {
   @Put('/:id')
   @UseGuards(JwtAuthGuard)
   updateComment(
-    @GetUser() user: UserEntity,
     @Param('id') id: number,
-    @Body() updateCommentDto: UpdateCommentDto
+    @Body() updateCommentDto: UpdateCommentDto,
+    @GetUser() user: UserEntity
   ): Promise<CommentEntity> {
-    return this.commentsService.updateComment(id, updateCommentDto, user);
+    return this.commentsService.updateComment(id, updateCommentDto, user)
   }
 
   @ApiOkResponse({
@@ -83,9 +83,9 @@ export class CommentsController {
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   deleteComment(
-    @GetUser() user: UserEntity,
-    @Param('id') id: number
+    @Param('id') id: number,
+    @GetUser() user: UserEntity
   ) {
-    return this.commentsService.deleteComment(id, user);
+    return this.commentsService.deleteComment(id, user)
   }
 }

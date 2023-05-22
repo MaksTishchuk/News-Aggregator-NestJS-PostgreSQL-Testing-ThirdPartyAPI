@@ -106,10 +106,6 @@ export class UserService {
     return {success: true, message: 'User has been deleted!'}
   }
 
-  async getUserByEmail(email: string): Promise<UserEntity> {
-    return await this.userRepository.findOne({where: {email}})
-  }
-
   async followUser(user: UserEntity, followUserId: number) {
     const foundUser = await this.userRepository.findOne({where: {id: followUserId}, relations: ['followers']})
     if (!foundUser) {
@@ -131,5 +127,9 @@ export class UserService {
     foundUser.followers = foundUser.followers.filter(follower => follower.id !== user.id)
     await this.userRepository.save(foundUser)
     return this.findOneUser(followUserId)
+  }
+
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    return await this.userRepository.findOne({where: {email}})
   }
 }

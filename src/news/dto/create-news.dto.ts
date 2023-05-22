@@ -22,5 +22,5 @@ export class CreateNewsDto {
 
   @ApiModelPropertyOptional({ type: ['string'], format: 'binary' })
   @IsOptional()
-  images: any;
+  images?: any;
 }

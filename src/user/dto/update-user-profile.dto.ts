@@ -1,5 +1,4 @@
 import {GenderEnum} from "../entities/enum/gender.enum";
-import {ApiProperty} from "@nestjs/swagger";
 import {IsOptional} from "class-validator";
 import {ApiModelPropertyOptional} from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
@@ -49,5 +48,5 @@ export class UpdateUserProfileDto {
 
   @ApiModelPropertyOptional({ type: 'string', format: 'binary' })
   @IsOptional()
-  avatar: any;
+  avatar?: any;
 }
