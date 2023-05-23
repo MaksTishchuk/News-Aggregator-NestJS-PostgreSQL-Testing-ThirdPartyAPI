@@ -106,7 +106,7 @@ describe('UserController', () => {
   })
 
   it('should delete user', () => {
-    expect(userController.deleteUser(1)).toEqual(
+    expect(userController.deleteUser(1)).toStrictEqual(
       {success: true, message: 'User has been deleted!'}
     )
     expect(mockUserService.deleteUser).toHaveBeenCalledWith(1)

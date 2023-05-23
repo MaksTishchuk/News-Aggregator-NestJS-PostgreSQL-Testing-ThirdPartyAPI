@@ -116,7 +116,7 @@ describe('CommentsController', () => {
   })
 
   it('should delete comment', () => {
-    expect(commentController.deleteComment(1, mockUser)).toEqual({
+    expect(commentController.deleteComment(1, mockUser)).toStrictEqual({
       success: true, message: 'Comment has been deleted!'
     })
     expect(mockCommentService.deleteComment).toHaveBeenCalledWith(1, mockUser)

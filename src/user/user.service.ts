@@ -69,7 +69,6 @@ export class UserService {
     try {
       let {firstName, lastName, phoneNumber, country, city, gender} = updateUserProfileDto
       const userProfile = await this.userRepository.findOne({where:  {id: user.id}})
-      if (!userProfile) throw new HttpException(`User with ID "${user.id}" has not been updated!`, HttpStatus.BAD_REQUEST)
       if (avatar) {
         this.fileService.removeFile(userProfile.avatar)
         avatar = this.fileService.createFile(avatar)
@@ -94,7 +93,7 @@ export class UserService {
       if (error.code === '22P02') {
         throw new ConflictException('Gender should be only Male, Female and Unselected!')
       }
-      throw new InternalServerErrorException('Something went wrong!')
+      throw new NotFoundException(`Something went wrong! ${error.response}`)
     }
   }
 

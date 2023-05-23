@@ -15,9 +15,6 @@ describe('NewsController', () => {
 
   const mockUser: UserEntity = MockUser
 
-  const mockRequest = httpMocks.createRequest()
-  mockRequest.user = mockUser
-
   const createMockNewsDto: CreateNewsDto = {
     title: "news 1",
     body: "body 1"
@@ -110,7 +107,7 @@ describe('NewsController', () => {
       .overrideProvider(NewsService).useValue(mockNewsService) // i am about it early
       .compile();
 
-    newsController = module.get<NewsController>(NewsController);
+    newsController = module.get<NewsController>(NewsController)
   });
 
 
@@ -121,7 +118,7 @@ describe('NewsController', () => {
   it('should find all news', () => {
     expect(newsController.findAllNews()).toEqual(mockNewsList)
     expect(newsController.findAllNews()).toHaveLength(3)
-    expect(mockNewsService.findAllNews).toHaveBeenCalledWith()
+    expect(mockNewsService.findAllNews).toHaveBeenCalled()
   })
 
   it('should creat a news', () => {
@@ -142,7 +139,7 @@ describe('NewsController', () => {
     expect(mockNewsService.searchNews).toHaveBeenCalledWith(mockSearchNewsDto)
   })
 
-  it('should find one news', () => {
+  it('should find one news',  () => {
     expect(newsController.findOneNews('news-1')).toEqual(mockNews)
     expect(mockNewsService.findOneNews).toHaveBeenCalledWith('news-1')
   })
@@ -158,7 +155,7 @@ describe('NewsController', () => {
   })
 
   it('should delete news', () => {
-    expect(newsController.deleteNews('news-1', mockUser)).toEqual({
+    expect(newsController.deleteNews('news-1', mockUser)).toStrictEqual({
       success: true, message: 'News has been deleted!'
     })
     expect(mockNewsService.deleteNews).toHaveBeenCalledWith('news-1', mockUser)

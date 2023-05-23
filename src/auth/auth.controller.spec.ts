@@ -93,7 +93,7 @@ describe('AuthController', () => {
   })
 
   it('should activate account', () => {
-    expect(authController.activate(token)).toEqual({
+    expect(authController.activate(token)).toStrictEqual({
       success: true,
       message: `Account with email "${mockUser.email}" has been activated!`
     })
@@ -108,7 +108,7 @@ describe('AuthController', () => {
   })
 
   it('should return info about sent forgot password link on email', () => {
-    expect(authController.forgotPassword(mockForgotPasswordDto)).toEqual({
+    expect(authController.forgotPassword(mockForgotPasswordDto)).toStrictEqual({
       message: 'We sent forgot password link on your email address! Please, check your email!'
     })
     expect(mockAuthService.forgotPassword).toHaveBeenCalledWith(mockForgotPasswordDto)
@@ -116,7 +116,7 @@ describe('AuthController', () => {
 
 
   it('should return info about change password success', () => {
-    expect(authController.changePassword(mockUser, mockChangePasswordDto)).toEqual({
+    expect(authController.changePassword(mockUser, mockChangePasswordDto)).toStrictEqual({
       success: true, message: 'User password has been updated!'
     })
     expect(mockAuthService.forgotPassword).toHaveBeenCalledWith(mockForgotPasswordDto)
