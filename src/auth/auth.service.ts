@@ -29,8 +29,8 @@ export class AuthService {
 
   async register(registerCredentialsDto: RegisterCredentialsDto) {
     let {username, email, password} = registerCredentialsDto
-    password = await bcryptjs.hash(password, 10)
-    const user = this.userRepository.create({username, email, password})
+    const hashPassword = await bcryptjs.hash(password, 10)
+    const user = this.userRepository.create({username, email, password: hashPassword})
     try {
       await this.userRepository.save(user)
       const accessToken = await this.generateAccessToken(user.id, user.username, user.email)
@@ -45,16 +45,16 @@ export class AuthService {
       if (err.code === '23505') {
         throw new ConflictException('Email already exists!')
       } else {
-        throw new InternalServerErrorException()
+        throw new InternalServerErrorException('Something went wrong!')
       }
     }
   }
 
   async activate(token: string) {
-    const data = this.jwtService.verify(token)
+    const data = await this.jwtService.verify(token)
     const user = await this.userRepository.findOne({where: {id: data.id}})
     if (!user) {
-      throw new UnauthorizedException(`User with activation link "${token}" was not found!`)
+      throw new UnauthorizedException(`User with activation link token "${token}" was not found!`)
     }
     user.isActivated = true
     await this.userRepository.save(user)
@@ -77,7 +77,7 @@ export class AuthService {
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
     const user = await this.userRepository.findOne({where: {email: forgotPasswordDto.email}})
     if (!user) {
-      throw new BadRequestException('User with this email was not found!')
+      throw new NotFoundException('User with this email was not found!')
     }
     const accessToken = await this.generateAccessToken(user.id, user.username, user.email)
     const forgotPasswordLink = `${process.env.CLIENT_HOST}/api/auth/forgot-password/${accessToken}`
@@ -96,7 +96,7 @@ export class AuthService {
       {password}
     )
     if (!updatedUser.affected) {
-      throw new NotFoundException(`Password for user with email "${user.email}" has not been updated!`)
+      throw new InternalServerErrorException(`Password for user with email "${user.email}" has not been updated!`)
     }
     return {success: true, message: 'User password has been updated!'}
   }
@@ -110,18 +110,18 @@ export class AuthService {
 
   async sendActivationLinkOnEmail(fullActivationLink, email, username) {
     await this.mailService.sendMail({
-        to: email,
-        from: process.env.SMTP_USER,
-        subject: `Confirmation your email on ${process.env.CLIENT_HOST}`,
-        text: '',
-        html:
-          `
-            <div>
-              <h1>Hello, ${username}! Follow the link to activate your account on ${process.env.CLIENT_HOST}!</h1>
-              <a href="${fullActivationLink}">${fullActivationLink}</a>
-            </div>
-          `
-      })
+      to: email,
+      from: process.env.SMTP_USER,
+      subject: `Confirmation your email on ${process.env.CLIENT_HOST}`,
+      text: '',
+      html:
+        `
+          <div>
+            <h1>Hello, ${username}! Follow the link to activate your account on ${process.env.CLIENT_HOST}!</h1>
+            <a href="${fullActivationLink}">${fullActivationLink}</a>
+          </div>
+        `
+    })
   }
 
   async sendForgotPasswordLinkOnEmail(forgotPasswordLink, email, username) {

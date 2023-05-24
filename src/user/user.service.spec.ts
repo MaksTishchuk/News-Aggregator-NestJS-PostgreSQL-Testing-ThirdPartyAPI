@@ -61,8 +61,8 @@ describe('UserService', () => {
       ],
     }).compile();
 
-    userService = module.get<UserService>(UserService);
-    fileService = module.get<FileService>(FileService);
+    userService = module.get<UserService>(UserService)
+    fileService = module.get<FileService>(FileService)
     userRepository = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity))
 
     jest.clearAllMocks()
