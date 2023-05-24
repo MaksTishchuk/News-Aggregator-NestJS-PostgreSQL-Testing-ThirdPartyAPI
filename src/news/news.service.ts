@@ -78,17 +78,22 @@ export class NewsService {
   }
 
   async findOneNews(slug: string): Promise<NewsEntity> {
-    const news = await this.newsRepository.findOne({where: {slug}, relations: ['author', 'comments', 'comments.author', 'images']})
-    if (!news) {
-      throw new NotFoundException(`News with slug "${slug}" was not found!`)
-    }
+    const news = await this.findNewsBySlug(slug)
     news.views += 1
     await this.newsRepository.save(news)
     return news
   }
 
+  async findNewsBySlug(slug: string): Promise<NewsEntity> {
+    const news = await this.newsRepository.findOne({where: {slug}, relations: ['author', 'comments', 'comments.author', 'images']})
+    if (!news) {
+      throw new NotFoundException(`News with slug "${slug}" was not found!`)
+    }
+    return news
+  }
+
   async updateNews(slug: string, updateNewsDto: UpdateNewsDto, user: UserEntity, images): Promise<NewsEntity> {
-    let news = await this.findOneNews(slug)
+    let news = await this.findNewsBySlug(slug)
     if (news.authorId === user.id || user.role === UserRoleEnum.ADMIN) {
       const updatedNews = await this.newsRepository.update({slug: slug}, updateNewsDto)
       if (!updatedNews.affected) {
@@ -116,22 +121,24 @@ export class NewsService {
           news.images.push(newImage)
         }
       }
-      return await this.findOneNews(slug)
+      return await this.findNewsBySlug(slug)
     } else {
       throw new BadRequestException(`News with slug "${slug}" was not updated! Access denied!`)
     }
   }
 
   async deleteNews(slug: string, user: UserEntity) {
-    let news = await this.findOneNews(slug)
+    let news = await this.findNewsBySlug(slug)
     if (news.authorId === user.id || user.role === UserRoleEnum.ADMIN) {
       const imagesOnDelete = await this.imageRepository.find({where: {newsId: news.id}})
       const result = await this.newsRepository.delete({slug: slug})
       if (!result.affected) {
         throw new NotFoundException(`News with slug "${slug}" was not deleted!`)
       }
-      for (const image of imagesOnDelete) {
-        this.fileService.removeFile(image.url)
+      if (imagesOnDelete) {
+        for (const image of imagesOnDelete) {
+          this.fileService.removeFile(image.url)
+        }
       }
       return {success: true, message: 'News has been deleted!'}
     } else {
@@ -140,16 +147,16 @@ export class NewsService {
   }
 
   async likeNews(newsSlug: string, user: UserEntity) {
-    const news = await this.findOneNews(newsSlug)
+    const news = await this.findNewsBySlug(newsSlug)
     news.likedByUsers.push(user)
     await this.newsRepository.save(news)
-    return await this.findOneNews(news.slug)
+    return this.findNewsBySlug(news.slug)
   }
 
   async unlikeNews(newsSlug: string, user: UserEntity) {
-    const news = await this.findOneNews(newsSlug)
+    const news = await this.findNewsBySlug(newsSlug)
     news.likedByUsers = news.likedByUsers.filter(likeUser => likeUser.id !== user.id)
     await this.newsRepository.save(news)
-    return await this.findOneNews(news.slug)
+    return this.findNewsBySlug(news.slug)
   }
 }
