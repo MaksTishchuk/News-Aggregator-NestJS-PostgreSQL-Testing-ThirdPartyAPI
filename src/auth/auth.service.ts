@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException, NotFoundException,
@@ -45,7 +44,7 @@ export class AuthService {
       if (err.code === '23505') {
         throw new ConflictException('Email already exists!')
       } else {
-        throw new InternalServerErrorException('Something went wrong!')
+        throw new InternalServerErrorException(`Something went wrong! ${err}`)
       }
     }
   }

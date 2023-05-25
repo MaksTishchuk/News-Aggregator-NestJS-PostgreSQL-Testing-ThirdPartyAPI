@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {UserEntity} from "./user/entities/user.entity";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import { NewsModule } from './news/news.module';
-import {NewsEntity} from "./news/entities/news.entity";
 import { CommentsModule } from './comments/comments.module';
-import {CommentEntity} from "./comments/entities/comment.entity";
 import { FileModule } from './file/file.module';
 import {MailerModule} from "@nestjs-modules/mailer";
 import { AuthModule } from './auth/auth.module';
-import {ImageEntity} from "./news/entities/images.entity";
 import {ServeStaticModule} from "@nestjs/serve-static";
 import * as path from 'path'
 import {getTypeOrmConfig} from "./config/typeorm.config";
