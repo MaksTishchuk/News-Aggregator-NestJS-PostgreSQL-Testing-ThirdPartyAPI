@@ -4,8 +4,7 @@ import {Repository} from "typeorm";
 import {UserEntity} from "../../entities/user.entity";
 import {UserService} from "../../user.service";
 import {SearchUsersDto} from "../../dto/search-users.dto";
-import {RegisterCredentialsDto} from "../../../auth/dto/register-credentials.dto";
-import {BadRequestException, ConflictException, NotFoundException} from "@nestjs/common";
+import {BadRequestException, NotFoundException} from "@nestjs/common";
 import {UpdateUserProfileDto} from "../../dto/update-user-profile.dto";
 
 describe('UserService Int', () =>  {
