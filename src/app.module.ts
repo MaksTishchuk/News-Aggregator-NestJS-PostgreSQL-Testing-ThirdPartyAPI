@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {UserEntity} from "./user/entities/user.entity";
-import {ConfigModule} from "@nestjs/config";
+import {ConfigModule, ConfigService} from "@nestjs/config";
 import { NewsModule } from './news/news.module';
 import {NewsEntity} from "./news/entities/news.entity";
 import { CommentsModule } from './comments/comments.module';
@@ -13,19 +13,18 @@ import { AuthModule } from './auth/auth.module';
 import {ImageEntity} from "./news/entities/images.entity";
 import {ServeStaticModule} from "@nestjs/serve-static";
 import * as path from 'path'
+import {getTypeOrmConfig} from "./config/typeorm.config";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true}),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [UserEntity, NewsEntity, CommentEntity, ImageEntity],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `stage.${process.env.NODE_ENV}.env`
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: getTypeOrmConfig
     }),
     MailerModule.forRoot({
       transport: {
