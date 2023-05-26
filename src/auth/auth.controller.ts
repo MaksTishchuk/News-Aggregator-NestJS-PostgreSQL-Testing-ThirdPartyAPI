@@ -3,7 +3,7 @@ import {
   Body,
   ConflictException,
   Controller,
-  Get,
+  Get, HttpCode,
   Param,
   Patch,
   Post, UnauthorizedException,
@@ -82,6 +82,7 @@ export class AuthController {
     }
   })
   @Post('/login')
+  @HttpCode(200)
   login(@Body() loginCredentialsDto: LoginCredentialsDto): Promise<{accessToken: string}> {
     return this.authService.login(loginCredentialsDto)
   }
@@ -104,6 +105,7 @@ export class AuthController {
     }
   })
   @Post('/forgot-password')
+  @HttpCode(200)
   forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<any> {
     return this.authService.forgotPassword(forgotPasswordDto)
   }

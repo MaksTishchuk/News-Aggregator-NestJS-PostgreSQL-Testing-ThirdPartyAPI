@@ -106,7 +106,7 @@ describe('AuthService Int', () =>  {
       email: "maks@gmail.com"
     }
 
-    it('should register user', async () => {
+    it('should send forgot password link on user email', async () => {
       const result = await authService.forgotPassword(forgotPasswordDto)
       expect(result).toStrictEqual({message: 'We sent forgot password link on your email address! Please, check your email!'})
     })
