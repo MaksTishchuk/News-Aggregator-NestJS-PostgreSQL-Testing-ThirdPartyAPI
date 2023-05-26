@@ -85,19 +85,19 @@ describe('UserController', () => {
       mockUserList.filter(user => user.username === mockSearchUsersDto.username)
     )
     expect(userController.searchUsers(mockSearchUsersDto)).toHaveLength(1)
-    expect(mockUserService.findAllUsers).toHaveBeenCalledWith()
+    expect(mockUserService.searchUsers).toHaveBeenCalledWith(mockSearchUsersDto)
   })
 
   it('should get user profile', () => {
     expect(userController.getUserProfile(mockUser)).toEqual({...mockUser, id: mockUser.id})
-    expect(mockUserService.findAllUsers).toHaveBeenCalledWith()
+    expect(mockUserService.getUserProfile).toHaveBeenCalledWith(mockUser)
   })
 
   it('should update user profile', () => {
     expect(userController.updateUserProfile(mockUser, mockUpdateUserProfileDto, [])).toEqual(
       {...mockUser, id: mockUser.id, ...mockUpdateUserProfileDto}
     )
-    expect(mockUserService.findAllUsers).toHaveBeenCalledWith()
+    expect(mockUserService.updateUserProfile).toHaveBeenCalledWith(mockUser, mockUpdateUserProfileDto, [])
   })
 
   it('should find one user', () => {
