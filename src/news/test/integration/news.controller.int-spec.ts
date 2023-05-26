@@ -5,20 +5,18 @@ import {UserEntity} from "../../../user/entities/user.entity";
 import {NewsEntity} from "../../entities/news.entity";
 import {CreateNewsDto} from "../../dto/create-news.dto";
 import {SearchNewsDto} from "../../dto/search-news.dto";
-import {BadRequestException, NotFoundException} from "@nestjs/common";
 import {UpdateNewsDto} from "../../dto/update-news.dto";
 import {JwtAuthGuard} from "../../../auth/guards/jwt-auth.guard";
 import {AdminRoleGuard} from "../../../user/guards/admin-role.guard";
 import * as request from "supertest";
 
-describe('NewsService Int', () =>  {
+describe('NewsController Int', () =>  {
   let app: any
   let httpServer: any
   let userRepository: Repository<UserEntity>
   let newsRepository: Repository<NewsEntity>
 
   let user: UserEntity
-  let notAuthorUser: UserEntity
   let slug: string
 
   beforeAll(async () => {

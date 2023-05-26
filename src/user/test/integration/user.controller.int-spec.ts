@@ -2,7 +2,6 @@ import {Test} from "@nestjs/testing";
 import {AppModule} from "../../../app.module";
 import {Repository} from "typeorm";
 import {UserEntity} from "../../entities/user.entity";
-import {UserService} from "../../user.service";
 import * as request from 'supertest'
 import {SearchUsersDto} from "../../dto/search-users.dto";
 import {JwtAuthGuard} from "../../../auth/guards/jwt-auth.guard";
@@ -50,7 +49,7 @@ describe('UserController Int', () =>  {
   })
 
   it('should be defined', () => {
-    expect(userRepository).toBeDefined();
+    expect(userRepository).toBeDefined()
   })
 
   describe('findAllUsers', () => {
