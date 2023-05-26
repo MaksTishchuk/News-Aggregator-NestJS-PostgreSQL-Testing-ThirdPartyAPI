@@ -1,6 +1,6 @@
 import {
   Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Query, UseInterceptors, UploadedFiles,
-  InternalServerErrorException, NotFoundException, BadRequestException
+  InternalServerErrorException, NotFoundException, BadRequestException, HttpCode
 } from '@nestjs/common';
 import {NewsService} from './news.service';
 import {CreateNewsDto} from './dto/create-news.dto';
@@ -116,6 +116,7 @@ export class NewsController {
   @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with this slug was not found!`)}})
   @ApiSecurity('bearer')
   @Post('/:slug/like')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   likeNews(
     @Param('slug') newsSlug: string,
@@ -128,6 +129,7 @@ export class NewsController {
   @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with this slug was not found!`)}})
   @ApiSecurity('bearer')
   @Delete('/:slug/like')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   unlikeNews(
     @Param('slug') newsSlug: string,

@@ -93,7 +93,7 @@ export class UserEntity {
   followingCount: number
 
   @ApiProperty({required: false, nullable: true, type: () => [NewsEntity], description:'User Liked News'})
-  @ManyToMany(type => NewsEntity, news => news.likedByUsers)
+  @ManyToMany(type => NewsEntity, news => news.likedByUsers, {nullable: false, onDelete: 'CASCADE'})
   @JoinColumn()
   likesNews: NewsEntity[]
 

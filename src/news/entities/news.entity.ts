@@ -55,7 +55,7 @@ export class NewsEntity {
   @ManyToMany(
     type => UserEntity,
     user => user.likesNews,
-    {eager: true}
+    {eager: true, nullable: false, onDelete: 'CASCADE'},
   )
   @JoinTable()
   likedByUsers: UserEntity[]

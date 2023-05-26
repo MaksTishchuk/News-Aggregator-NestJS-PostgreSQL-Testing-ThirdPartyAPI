@@ -16,7 +16,6 @@ describe('AuthService Int', () =>  {
   let app: any
   let httpServer: any
   let userRepository: Repository<UserEntity>
-  let authService: AuthService
   let jwtService: JwtService
 
   let user: UserEntity
@@ -42,7 +41,6 @@ describe('AuthService Int', () =>  {
     httpServer = app.getHttpServer()
 
     userRepository = module.get('UserEntityRepository')
-    authService = module.get(AuthService)
     jwtService = module.get(JwtService)
   })
 

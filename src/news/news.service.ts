@@ -25,7 +25,7 @@ export class NewsService {
     const news = this.newsRepository.create({...createNewsDto, author: user})
     await this.newsRepository.save(news)
     let newsFromDb = await this.newsRepository.findOne({where: {slug: news.slug}, relations: ['images']})
-    if (images.images) {
+    if (images && images.images) {
       for (const image of images.images) {
         const thisImage = this.fileService.createFile(image)
         const newImage = this.imageRepository.create({url: thisImage, news: newsFromDb})
@@ -99,7 +99,7 @@ export class NewsService {
       if (!updatedNews.affected) {
         throw new NotFoundException(`News with slug "${slug}" was not updated!`)
       }
-      if (images.images) {
+      if (images && images.images) {
         const imagesOnDelete = await this.imageRepository.find({where: {newsId: news.id}})
         let imagesIds = []
         for (const image of imagesOnDelete) {

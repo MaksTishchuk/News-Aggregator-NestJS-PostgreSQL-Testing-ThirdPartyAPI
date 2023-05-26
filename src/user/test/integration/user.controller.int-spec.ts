@@ -13,7 +13,6 @@ describe('UserController Int', () =>  {
   let app: any
   let httpServer: any
   let userRepository: Repository<UserEntity>
-  let userService: UserService
 
   let user: UserEntity
   let users: UserEntity[]
@@ -40,7 +39,6 @@ describe('UserController Int', () =>  {
     httpServer = app.getHttpServer()
 
     userRepository = module.get('UserEntityRepository')
-    userService = module.get(UserService)
   })
 
   afterAll(async () => {
