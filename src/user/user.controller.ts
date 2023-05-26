@@ -1,7 +1,7 @@
 import {
   Controller, Get, Post, Body, Param, Delete, Put, Query, UseGuards, UseInterceptors, UploadedFile,
   ParseIntPipe, BadRequestException, NotFoundException, HttpException, HttpStatus,
-  ConflictException, InternalServerErrorException
+  ConflictException, InternalServerErrorException, HttpCode
 } from '@nestjs/common';
 import {UserService} from './user.service';
 import {UserEntity} from "./entities/user.entity";
@@ -80,6 +80,7 @@ export class UserController {
   @ApiBadRequestResponse({schema: {example: new BadRequestException(`A user cannot subscribe to himself!`)}})
   @ApiSecurity('bearer')
   @Post('/:id/follow')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   followUser(
     @GetUser() user: UserEntity,
@@ -92,6 +93,7 @@ export class UserController {
   @ApiNotFoundResponse({schema: {example: new NotFoundException(`User with this id was not found! Unfollow failed!`)}})
   @ApiSecurity('bearer')
   @Delete('/:id/follow')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   unfollowUser(
     @GetUser() user: UserEntity,
