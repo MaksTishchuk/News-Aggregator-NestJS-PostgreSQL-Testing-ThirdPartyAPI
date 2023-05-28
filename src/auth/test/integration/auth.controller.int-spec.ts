@@ -2,7 +2,6 @@ import {Test} from "@nestjs/testing";
 import {AppModule} from "../../../app.module";
 import {Repository} from "typeorm";
 import {UserEntity} from "../../../user/entities/user.entity";
-import {AuthService} from "../../auth.service";
 import {RegisterCredentialsDto} from "../../dto/register-credentials.dto";
 import {JwtAuthGuard} from "../../guards/jwt-auth.guard";
 import * as request from "supertest";
@@ -19,6 +18,7 @@ describe('AuthService Int', () =>  {
   let jwtService: JwtService
 
   let user: UserEntity
+  let token: string
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -26,14 +26,14 @@ describe('AuthService Int', () =>  {
         AppModule
       ],
     })
-      .overrideGuard(JwtAuthGuard)
-      .useValue({
-        canActivate: (ctx) => {
-          const request = ctx.switchToHttp().getRequest();
-          request.user = user
-          return true
-        }
-      })
+      // .overrideGuard(JwtAuthGuard)
+      // .useValue({
+      //   canActivate: (ctx) => {
+      //     const request = ctx.switchToHttp().getRequest();
+      //     request.user = user
+      //     return true
+      //   }
+      // })
       .compile()
 
     app = module.createNestApplication()
@@ -111,6 +111,7 @@ describe('AuthService Int', () =>  {
       expect(response.body.accessToken).toBeDefined()
       expect(typeof response.body.accessToken).toEqual("string")
       expect(response.body.accessToken).toBeTruthy()
+      token = response.body.accessToken
     })
   })
 
@@ -140,7 +141,9 @@ describe('AuthService Int', () =>  {
     }
 
     it('should change user password', async () => {
-      const response = await request(httpServer).patch('/auth/change-password').send(changePasswordDto)
+      const response = await request(httpServer).patch('/auth/change-password')
+        .send(changePasswordDto)
+        .set('Authorization', `bearer ${token}`)
       expect(response.status).toBe(200)
       expect(response.body).toStrictEqual({success: true, message: 'User password has been updated!'})
     })
