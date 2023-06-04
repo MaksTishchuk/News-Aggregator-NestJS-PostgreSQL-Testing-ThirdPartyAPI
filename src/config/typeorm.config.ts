@@ -9,7 +9,7 @@ export const getTypeOrmConfig = async (configService: ConfigService): Promise<Ty
   type: "postgres",
   host: configService.get<string>('DB_HOST'),
   port: configService.get<number>('DB_PORT'),
-  database: configService.get<string>('DB_DATABASE'),
+  database: configService.get<string>('DB_NAME'),
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   autoLoadEntities: true,

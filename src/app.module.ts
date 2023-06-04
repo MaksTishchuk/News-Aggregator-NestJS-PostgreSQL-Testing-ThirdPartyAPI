@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import {ServeStaticModule} from "@nestjs/serve-static";
 import * as path from 'path'
 import {getTypeOrmConfig} from "./config/typeorm.config";
+import { ThirdPartyApiModule } from './third-party-api/third-party-api.module';
+import { ChatGptModule } from './chat-gpt/chat-gpt.module';
+import { StabilityAiModule } from './stability-ai/stability-ai.module';
 
 @Module({
   imports: [
@@ -38,7 +41,10 @@ import {getTypeOrmConfig} from "./config/typeorm.config";
     NewsModule,
     CommentsModule,
     FileModule,
-    AuthModule
+    AuthModule,
+    ThirdPartyApiModule,
+    ChatGptModule,
+    StabilityAiModule
   ],
   controllers: [],
   providers: [],
