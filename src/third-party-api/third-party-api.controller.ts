@@ -11,7 +11,7 @@ export class ThirdPartyApiController {
     return this.thirdPartyApiService.getGitHubInfo(username)
   }
 
-  @Get('exchange-privat-bank')
+  @Get('exchange-privat')
   exchangePrivatBank() {
     return this.thirdPartyApiService.exchangePrivatBank()
   }
