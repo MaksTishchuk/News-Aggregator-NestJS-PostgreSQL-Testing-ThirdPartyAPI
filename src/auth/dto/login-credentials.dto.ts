@@ -1,5 +1,12 @@
-import {IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginCredentialsDto {
   @ApiProperty({
@@ -9,7 +16,7 @@ export class LoginCredentialsDto {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  email: string
+  email: string;
 
   @ApiProperty({
     description: 'Password',
@@ -19,8 +26,8 @@ export class LoginCredentialsDto {
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(20)
-  @Matches(
-    /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-    {message: 'Password too week'})
-  password: string
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'Password too week',
+  })
+  password: string;
 }

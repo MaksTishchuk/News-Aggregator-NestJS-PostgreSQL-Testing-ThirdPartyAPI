@@ -1,7 +1,7 @@
 enum GenderEnum {
   UNSELECTED = 'Unselected',
   MALE = 'Male',
-  FEMALE = 'Female'
+  FEMALE = 'Female',
 }
 
-export {GenderEnum}
+export { GenderEnum };

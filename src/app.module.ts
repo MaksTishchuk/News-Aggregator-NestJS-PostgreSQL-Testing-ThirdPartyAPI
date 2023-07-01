@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
-import {TypeOrmModule} from "@nestjs/typeorm";
-import {ConfigModule, ConfigService} from "@nestjs/config";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
 import { CommentsModule } from './comments/comments.module';
 import { FileModule } from './file/file.module';
-import {MailerModule} from "@nestjs-modules/mailer";
+import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
-import {ServeStaticModule} from "@nestjs/serve-static";
-import * as path from 'path'
-import {getTypeOrmConfig} from "./config/typeorm.config";
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
+import { getTypeOrmConfig } from './config/typeorm.config';
 import { ThirdPartyApiModule } from './third-party-api/third-party-api.module';
 import { ChatGptModule } from './chat-gpt/chat-gpt.module';
 import { StabilityAiModule } from './stability-ai/stability-ai.module';
@@ -18,12 +18,12 @@ import { StabilityAiModule } from './stability-ai/stability-ai.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `stage.${process.env.NODE_ENV}.env`
+      envFilePath: `stage.${process.env.NODE_ENV}.env`,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: getTypeOrmConfig
+      useFactory: getTypeOrmConfig,
     }),
     MailerModule.forRoot({
       transport: {
@@ -32,11 +32,14 @@ import { StabilityAiModule } from './stability-ai/stability-ai.module';
         secure: false,
         auth: {
           user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD
+          pass: process.env.SMTP_PASSWORD,
         },
-      }
+      },
     }),
-    ServeStaticModule.forRoot({serveRoot: '/images', rootPath: path.resolve(__dirname, 'static')}),
+    ServeStaticModule.forRoot({
+      serveRoot: '/images',
+      rootPath: path.resolve(__dirname, 'static'),
+    }),
     UserModule,
     NewsModule,
     CommentsModule,
@@ -44,7 +47,7 @@ import { StabilityAiModule } from './stability-ai/stability-ai.module';
     AuthModule,
     ThirdPartyApiModule,
     ChatGptModule,
-    StabilityAiModule
+    StabilityAiModule,
   ],
   controllers: [],
   providers: [],

@@ -1,5 +1,5 @@
-import {IsNotEmpty, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
   @ApiProperty({
@@ -8,7 +8,7 @@ export class CreateCommentDto {
   })
   @IsNotEmpty()
   @IsString()
-  text: string
+  text: string;
 
   @ApiProperty({
     description: 'News slug to add comment',
@@ -16,5 +16,5 @@ export class CreateCommentDto {
   })
   @IsNotEmpty()
   @IsString()
-  newsSlug: string
+  newsSlug: string;
 }

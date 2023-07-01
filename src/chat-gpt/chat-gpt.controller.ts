@@ -1,6 +1,6 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ChatGptService } from './chat-gpt.service';
-import {ChatGptQuestionDto} from "./dto/chat-gpt-question.dto";
+import { ChatGptQuestionDto } from './dto/chat-gpt-question.dto';
 
 @Controller('chatGPT')
 export class ChatGptController {
@@ -8,6 +8,6 @@ export class ChatGptController {
 
   @Post('')
   getChatGPTAnswer(@Body() dto: ChatGptQuestionDto) {
-    return this.chatGptService.getChatGPTAnswer(dto.question)
+    return this.chatGptService.getChatGPTAnswer(dto.question);
   }
 }

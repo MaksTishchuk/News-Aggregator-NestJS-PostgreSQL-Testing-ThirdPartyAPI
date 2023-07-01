@@ -18,7 +18,8 @@
     "test:cov": "SET NODE_ENV=testing& jest --coverage",
     "test:debug": "SET NODE_ENV=testing& node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "SET NODE_ENV=testing& jest --config ./test/jest-e2e.json",
-    "test:int": "SET NODE_ENV=testing& jest -i --no-cache --watch --config jest-int.json"
+    "test:int": "SET NODE_ENV=testing& jest -i --no-cache --config jest-int.json --detectOpenHandles",
+    "test:int-watch": "SET NODE_ENV=testing& jest -i --no-cache --watch --config jest-int.json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",

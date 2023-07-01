@@ -1,17 +1,17 @@
-import {UserEntity} from "../src/user/entities/user.entity";
-import {GenderEnum} from "../src/user/entities/enum/gender.enum";
-import {UserRoleEnum} from "../src/user/entities/enum/user-role.enum";
-import {NewsEntity} from "../src/news/entities/news.entity";
-import {CommentEntity} from "../src/comments/entities/comment.entity";
+import { UserEntity } from '../src/user/entities/user.entity';
+import { GenderEnum } from '../src/user/entities/enum/gender.enum';
+import { UserRoleEnum } from '../src/user/entities/enum/user-role.enum';
+import { NewsEntity } from '../src/news/entities/news.entity';
+import { CommentEntity } from '../src/comments/entities/comment.entity';
 
 export const MockUser: UserEntity = {
-  avatar: "",
-  city: "",
+  avatar: '',
+  city: '',
   comments: [],
-  country: "",
+  country: '',
   created: new Date(),
-  email: "maks@gmail.com",
-  firstName: "",
+  email: 'maks@gmail.com',
+  firstName: '',
   followers: [],
   followersCount: 0,
   following: [],
@@ -19,15 +19,15 @@ export const MockUser: UserEntity = {
   gender: GenderEnum.UNSELECTED,
   id: 1,
   isActivated: true,
-  lastName: "",
+  lastName: '',
   likesNews: [],
   news: [],
-  password: "Qwerty123",
-  phoneNumber: "",
+  password: 'Qwerty123',
+  phoneNumber: '',
   role: UserRoleEnum.MEMBER,
   updated: new Date(),
-  username: "maks"
-}
+  username: 'maks',
+};
 
 export const MockNews: NewsEntity = {
   id: 1,
@@ -43,16 +43,16 @@ export const MockNews: NewsEntity = {
   likesCount: 0,
   updated: new Date(),
   views: 0,
-  generateSlug(): void {}
-}
+  generateSlug(): void {},
+};
 
 export const MockComment: CommentEntity = {
-    id: 1,
-    text: "Comment 1",
-    author: MockUser,
-    authorId: MockUser.id,
-    news: MockNews,
-    newsId: MockNews.id,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
+  id: 1,
+  text: 'Comment 1',
+  author: MockUser,
+  authorId: MockUser.id,
+  news: MockNews,
+  newsId: MockNews.id,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};

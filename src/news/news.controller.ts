@@ -1,64 +1,100 @@
 import {
-  Controller, Get, Post, Body, Param, Delete, Put, UseGuards, Query, UseInterceptors, UploadedFiles,
-  InternalServerErrorException, NotFoundException, BadRequestException, HttpCode
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  UseGuards,
+  Query,
+  UseInterceptors,
+  UploadedFiles,
+  InternalServerErrorException,
+  NotFoundException,
+  BadRequestException,
+  HttpCode,
 } from '@nestjs/common';
-import {NewsService} from './news.service';
-import {CreateNewsDto} from './dto/create-news.dto';
-import {UpdateNewsDto} from './dto/update-news.dto';
-import {NewsEntity} from "./entities/news.entity";
-import {UserEntity} from "../user/entities/user.entity";
-import {SearchNewsDto} from "./dto/search-news.dto";
-import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
-import {GetUser} from "../auth/decorators/get-user.decorator";
-import {FileFieldsInterceptor} from "@nestjs/platform-express";
+import { NewsService } from './news.service';
+import { CreateNewsDto } from './dto/create-news.dto';
+import { UpdateNewsDto } from './dto/update-news.dto';
+import { NewsEntity } from './entities/news.entity';
+import { UserEntity } from '../user/entities/user.entity';
+import { SearchNewsDto } from './dto/search-news.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
-  ApiBadRequestResponse, ApiConsumes, ApiInternalServerErrorResponse, ApiNotFoundResponse,
-  ApiOkResponse, ApiOperation, ApiSecurity, ApiTags
-} from "@nestjs/swagger";
+  ApiBadRequestResponse,
+  ApiConsumes,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('News')
 @Controller('news')
 export class NewsController {
-  constructor(private readonly newsService: NewsService) {
-  }
+  constructor(private readonly newsService: NewsService) {}
 
-  @ApiOkResponse({type: [NewsEntity]})
-  @ApiOperation({description: 'Get all news'})
-  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
+  @ApiOkResponse({ type: [NewsEntity] })
+  @ApiOperation({ description: 'Get all news' })
+  @ApiInternalServerErrorResponse({
+    schema: {
+      example: new InternalServerErrorException('Something went wrong!'),
+    },
+  })
   @Get()
   findAllNews(): Promise<NewsEntity[]> {
     return this.newsService.findAllNews();
   }
 
-  @ApiOkResponse({type: NewsEntity})
-  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
+  @ApiOkResponse({ type: NewsEntity })
+  @ApiInternalServerErrorResponse({
+    schema: {
+      example: new InternalServerErrorException('Something went wrong!'),
+    },
+  })
   @ApiSecurity('bearer')
   @ApiConsumes('multipart/form-data')
   @Post()
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileFieldsInterceptor([{name: 'images', maxCount: 10}]))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 10 }]))
   createNews(
     @Body() createNewsDto: CreateNewsDto,
     @GetUser() user: UserEntity,
-    @UploadedFiles() images
+    @UploadedFiles() images,
   ): Promise<NewsEntity> {
     return this.newsService.createNews(createNewsDto, user, images);
   }
 
-  @ApiOkResponse({type: [NewsEntity]})
-  @ApiOperation({description: 'Get news by search params'})
-  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
+  @ApiOkResponse({ type: [NewsEntity] })
+  @ApiOperation({ description: 'Get news by search params' })
+  @ApiInternalServerErrorResponse({
+    schema: {
+      example: new InternalServerErrorException('Something went wrong!'),
+    },
+  })
   @Get('/search')
-  searchNews(
-    @Query() searchNewsDto: SearchNewsDto
-  ) {
-    return this.newsService.searchNews(searchNewsDto)
+  searchNews(@Query() searchNewsDto: SearchNewsDto) {
+    return this.newsService.searchNews(searchNewsDto);
   }
 
-  @ApiOkResponse({type: [NewsEntity]})
-  @ApiOperation({description: 'Get news of following users'})
-  @ApiInternalServerErrorResponse({schema: {example: new InternalServerErrorException('Something went wrong!')}})
-  @ApiNotFoundResponse({schema: {example: new NotFoundException(`User with id has not been updated!`)}})
+  @ApiOkResponse({ type: [NewsEntity] })
+  @ApiOperation({ description: 'Get news of following users' })
+  @ApiInternalServerErrorResponse({
+    schema: {
+      example: new InternalServerErrorException('Something went wrong!'),
+    },
+  })
+  @ApiNotFoundResponse({
+    schema: {
+      example: new NotFoundException(`User with id has not been updated!`),
+    },
+  })
   @ApiSecurity('bearer')
   @Get('/following-users-news')
   @UseGuards(JwtAuthGuard)
@@ -66,27 +102,39 @@ export class NewsController {
     return this.newsService.followingUsersNews(user);
   }
 
-  @ApiOkResponse({type: NewsEntity})
-  @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with slug was not found!`)}})
+  @ApiOkResponse({ type: NewsEntity })
+  @ApiNotFoundResponse({
+    schema: { example: new NotFoundException(`News with slug was not found!`) },
+  })
   @Get('/:slug')
   @UseGuards(JwtAuthGuard)
   findOneNews(@Param('slug') slug: string): Promise<NewsEntity> {
     return this.newsService.findOneNews(slug);
   }
 
-  @ApiOkResponse({type: NewsEntity})
-  @ApiBadRequestResponse({schema: {example: new NotFoundException(`News with slug was not updated!`)}})
-  @ApiNotFoundResponse({schema: {example: new BadRequestException(`News with slug was not updated! Access denied!`)}})
+  @ApiOkResponse({ type: NewsEntity })
+  @ApiBadRequestResponse({
+    schema: {
+      example: new NotFoundException(`News with slug was not updated!`),
+    },
+  })
+  @ApiNotFoundResponse({
+    schema: {
+      example: new BadRequestException(
+        `News with slug was not updated! Access denied!`,
+      ),
+    },
+  })
   @ApiSecurity('bearer')
   @ApiConsumes('multipart/form-data')
   @Put('/:slug')
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileFieldsInterceptor([{name: 'images', maxCount: 10}]))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 10 }]))
   updateNews(
     @Param('slug') slug: string,
     @Body() updateNewsDto: UpdateNewsDto,
     @GetUser() user: UserEntity,
-    @UploadedFiles() images
+    @UploadedFiles() images,
   ): Promise<NewsEntity> {
     return this.newsService.updateNews(slug, updateNewsDto, user, images);
   }
@@ -96,45 +144,54 @@ export class NewsController {
     schema: {
       example: {
         success: true,
-        message: 'News has been deleted!'
-      }
-    }
+        message: 'News has been deleted!',
+      },
+    },
   })
-  @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with slug was not deleted!`)}})
-  @ApiBadRequestResponse({schema: {example: new BadRequestException(`News with slug was not deleted! Access denied!`)}})
+  @ApiNotFoundResponse({
+    schema: {
+      example: new NotFoundException(`News with slug was not deleted!`),
+    },
+  })
+  @ApiBadRequestResponse({
+    schema: {
+      example: new BadRequestException(
+        `News with slug was not deleted! Access denied!`,
+      ),
+    },
+  })
   @ApiSecurity('bearer')
   @Delete('/:slug')
   @UseGuards(JwtAuthGuard)
-  deleteNews(
-    @Param('slug') slug: string,
-    @GetUser() user: UserEntity
-  ) {
+  deleteNews(@Param('slug') slug: string, @GetUser() user: UserEntity) {
     return this.newsService.deleteNews(slug, user);
   }
 
-  @ApiOkResponse({type: NewsEntity})
-  @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with this slug was not found!`)}})
+  @ApiOkResponse({ type: NewsEntity })
+  @ApiNotFoundResponse({
+    schema: {
+      example: new NotFoundException(`News with this slug was not found!`),
+    },
+  })
   @ApiSecurity('bearer')
   @Post('/:slug/like')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  likeNews(
-    @Param('slug') newsSlug: string,
-    @GetUser() user: UserEntity
-  ) {
+  likeNews(@Param('slug') newsSlug: string, @GetUser() user: UserEntity) {
     return this.newsService.likeNews(newsSlug, user);
   }
 
-  @ApiOkResponse({type: NewsEntity})
-  @ApiNotFoundResponse({schema: {example: new NotFoundException(`News with this slug was not found!`)}})
+  @ApiOkResponse({ type: NewsEntity })
+  @ApiNotFoundResponse({
+    schema: {
+      example: new NotFoundException(`News with this slug was not found!`),
+    },
+  })
   @ApiSecurity('bearer')
   @Delete('/:slug/like')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  unlikeNews(
-    @Param('slug') newsSlug: string,
-    @GetUser() user: UserEntity
-  ) {
+  unlikeNews(@Param('slug') newsSlug: string, @GetUser() user: UserEntity) {
     return this.newsService.unlikeNews(newsSlug, user);
   }
 }

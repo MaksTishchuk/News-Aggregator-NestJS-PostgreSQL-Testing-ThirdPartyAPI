@@ -1,16 +1,15 @@
-import {IsNotEmpty, IsOptional, IsString} from "class-validator";
-import {ApiProperty} from "@nestjs/swagger";
-import {ApiModelPropertyOptional} from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ApiModelPropertyOptional } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 export class CreateNewsDto {
-
   @ApiProperty({
     description: 'News title',
     example: 'This is news title',
   })
   @IsNotEmpty()
   @IsString()
-  title: string
+  title: string;
 
   @ApiProperty({
     description: 'News body',
@@ -18,7 +17,7 @@ export class CreateNewsDto {
   })
   @IsNotEmpty()
   @IsString()
-  body: string
+  body: string;
 
   @ApiModelPropertyOptional({ type: ['string'], format: 'binary' })
   @IsOptional()

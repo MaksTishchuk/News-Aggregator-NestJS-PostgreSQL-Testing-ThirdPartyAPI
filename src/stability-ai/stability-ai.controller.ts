@@ -1,7 +1,7 @@
-import {Body, Controller, Post, UseInterceptors} from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { StabilityAiService } from './stability-ai.service';
-import {StabilityAiGenerateImageDto} from "./dto/stability-ai-generate-image.dto";
-import {FileInterceptor} from "@nestjs/platform-express";
+import { StabilityAiGenerateImageDto } from './dto/stability-ai-generate-image.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('stability-ai')
 export class StabilityAiController {
@@ -10,6 +10,6 @@ export class StabilityAiController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async generateImage(@Body() dto: StabilityAiGenerateImageDto) {
-    return this.stabilityAiService.generateImageFromText(dto)
+    return this.stabilityAiService.generateImageFromText(dto);
   }
 }
